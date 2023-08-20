@@ -1,0 +1,58 @@
+parameters:
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    # Services definition
+    # -------------------
+    App\:
+        resource: '../app/'
+        exclude:
+            - '../app/DependencyInjection/'
+            - '../app/Entity/'
+            - '../app/Kernel.php'
+            - '../app/Tests/'
+
+    Payouts\:
+        resource: '../src/'
+
+    App\Controller\:
+        resource: '../app/Controller/'
+        tags: [ 'controller.service_arguments' ]
+
+    # Tag instances
+    # -------------
+    _instanceof:
+        Payouts\Shared\Domain\Bus\Command\CommandHandler:
+            tags: ['payouts.command_handler']
+
+        Payouts\Shared\Domain\Bus\Query\QueryHandler:
+            tags: ['payouts.query_handler']
+
+        Payouts\Shared\Domain\Bus\Event\EventSubscriber:
+            tags: [ 'payouts.event_subscriber' ]
+
+    # Configure params
+    # ----------------
+    Payouts\Shared\Infrastructure\Bus\Command\InMemorySymfonyCommandBus:
+        arguments: [!tagged payouts.command_handler]
+
+    Payouts\Shared\Infrastructure\Bus\Query\InMemorySymfonyQueryBus:
+        arguments: [!tagged payouts.query_handler]
+
+    Payouts\Shared\Infrastructure\Bus\Event\InMemorySymfonyEventBus:
+        arguments: [ !tagged payouts.event_subscriber ]
+
+    Payouts\Shared\Infrastructure\Bus\Event\MySqlDoctrineEventConsumer:
+        arguments: [ !tagged payouts.event_subscriber ]
+
+    Payouts\Shared\Domain\Bus\Event\EventMapping:
+        arguments:
+            $mapping:
+                - Payouts\Payout\Domain\Event\PayoutCreatedEvent
+
+    # Interfaces definitions
+    # ----------------------
+    Payouts\Shared\Domain\Bus\Event\EventBus: '@Payouts\Shared\Infrastructure\Bus\Event\MySqlDoctrineEventBus'

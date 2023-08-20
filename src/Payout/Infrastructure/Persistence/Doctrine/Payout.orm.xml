@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Payouts\Payout\Domain\Payout" table="payouts">
+        <id name="uuid" type="payout_uuid" column="uuid" length="36"/>
+        <field name="name" type="payout_name" column="name" nullable="true" />
+        <embedded name="email" class="Payouts\Payout\Domain\ValueObject\PayoutEmail" use-column-prefix="false"/>
+        <embedded name="bankAccountNumber" class="Payouts\Payout\Domain\ValueObject\PayoutBankAccountNumber" use-column-prefix="false"/>
+        <embedded name="amount" class="Payouts\Payout\Domain\ValueObject\PayoutAmount" use-column-prefix="false"/>
+        <embedded name="status" class="Payouts\Payout\Domain\ValueObject\PayoutStatus" use-column-prefix="false"/>
+        <embedded name="createdAt" class="Payouts\Payout\Domain\ValueObject\PayoutCreatedAt" use-column-prefix="false" />
+    </entity>
+
+</doctrine-mapping>

@@ -1,0 +1,7 @@
+payouts-create:
+  path: /payouts/create
+  controller: App\Controller\Payouts\PayoutsCreateController
+
+payouts-list:
+  path: /payouts/list
+  controller: App\Controller\Payouts\PayoutsListController

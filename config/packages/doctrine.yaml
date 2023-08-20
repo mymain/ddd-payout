@@ -1,0 +1,25 @@
+doctrine:
+    dbal:
+        url: '%env(resolve:DATABASE_URL)%'
+        types:
+            payout_uuid: Payouts\Payout\Infrastructure\Persistence\Doctrine\ValueObjectPayoutUuidType
+            payout_name: Payouts\Payout\Infrastructure\Persistence\Doctrine\ValueObjectPayoutNameType
+            event_log_uuid: Payouts\EventLogger\Infrastructure\Persistence\Doctrine\ValueObjectEventLogUuidType
+
+    orm:
+        auto_generate_proxy_classes: true
+        naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+        auto_mapping: true
+        mappings:
+            Payout:
+                is_bundle: false
+                type: xml
+                dir: '%kernel.project_dir%/src/Payout/Infrastructure/Persistence/Doctrine'
+                prefix: 'Payouts\Payout\Domain'
+                alias: Payouts\Payout\Domain
+            EventLogger:
+                is_bundle: false
+                type: xml
+                dir: '%kernel.project_dir%/src/EventLogger/Infrastructure/Persistence/Doctrine'
+                prefix: 'Payouts\EventLogger\Domain'
+                alias: Payouts\EventLogger\Domain

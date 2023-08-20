@@ -1,0 +1,12 @@
+framework:
+    messenger:
+        failure_transport: failed
+
+        transports:
+            authorization:
+                dsn: '%env(AUTHORIZATION_MESSENGER_TRANSPORT_DSN)%'
+            failed:
+                dsn: '%env(FAILED_MESSENGER_TRANSPORT_DSN)%'
+
+        routing:
+            'Payouts\Payout\Domain\Event\PayoutAuthorizationEvent': authorization

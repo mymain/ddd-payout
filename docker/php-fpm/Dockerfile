@@ -1,9 +1,6 @@
 FROM php:8.1-fpm
 WORKDIR "/application"
 
-# Fix debconf warnings upon build
-#ARG DEBIAN_FRONTEND=noninteractive
-
 # Install selected extensions and other stuff
 RUN apt-get update && apt-get install -y \
     gnupg \
@@ -20,9 +17,14 @@ RUN apt-get update && apt-get install -y \
     libicu-dev  \
     libonig-dev \
     libxslt1-dev \
-    acl
+    acl \
+    librabbitmq-dev \
+    libssh-dev \
+    && pecl install amqp
 
 RUN docker-php-ext-install \
     pdo pdo_mysql zip xsl gd intl opcache exif mbstring
+
+RUN docker-php-ext-enable amqp
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer

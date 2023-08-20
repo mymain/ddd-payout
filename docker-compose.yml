@@ -1,6 +1,7 @@
 version: "3.5"
 services:
     mysql:
+      restart: unless-stopped
       image: mysql:8.0
       container_name: payouts-mysql
       command: --default-authentication-plugin=mysql_native_password
@@ -16,6 +17,7 @@ services:
       networks:
         - payouts_network
     webserver:
+      restart: unless-stopped
       image: nginx:alpine
       container_name: payouts-webserver
       working_dir: /application
@@ -27,12 +29,22 @@ services:
       networks:
         - payouts_network
     php-fpm:
+      restart: unless-stopped
       build: docker/php-fpm
       container_name: payouts-php-fpm
       working_dir: /application
       volumes:
         - .:/application
         - ./docker/php-fpm/php-ini-overrides.ini:/etc/php/8.1/fpm/conf.d/99-overrides.ini
+      networks:
+        - payouts_network
+    rabbitmq:
+      restart: unless-stopped
+      image: rabbitmq:3-management
+      container_name: payouts-rabbitmq
+      ports:
+        - "8003:5672"
+        - "8004:15672"
       networks:
         - payouts_network
 

@@ -20,7 +20,7 @@ services:
 
     App\Controller\:
         resource: '../app/Controller/'
-        tags: [ 'controller.service_arguments' ]
+        tags: ['controller.service_arguments']
 
     # Tag instances
     # -------------
@@ -34,6 +34,9 @@ services:
         Payouts\Shared\Domain\Bus\Event\EventSubscriber:
             tags: [ 'payouts.event_subscriber' ]
 
+        Payouts\Authorization\Domain\Handler\HandlerInterface:
+            tags: ['payouts.authorization_handler']
+
     # Configure params
     # ----------------
     Payouts\Shared\Infrastructure\Bus\Command\InMemorySymfonyCommandBus:
@@ -43,10 +46,14 @@ services:
         arguments: [!tagged payouts.query_handler]
 
     Payouts\Shared\Infrastructure\Bus\Event\InMemorySymfonyEventBus:
-        arguments: [ !tagged payouts.event_subscriber ]
+        arguments: [!tagged payouts.event_subscriber]
 
     Payouts\Shared\Infrastructure\Bus\Event\MySqlDoctrineEventConsumer:
-        arguments: [ !tagged payouts.event_subscriber ]
+        arguments: [!tagged payouts.event_subscriber]
+
+    Payouts\Authorization\Domain\AuthorizationService:
+        arguments:
+            - !tagged_iterator payouts.authorization_handler
 
     Payouts\Shared\Domain\Bus\Event\EventMapping:
         arguments:

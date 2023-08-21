@@ -14,4 +14,14 @@ class IntValueObject
     {
         return $this->value;
     }
+
+    public function greaterThan(self $amount): bool
+    {
+        return $this->value > $amount->value();
+    }
+
+    public function lessThan(self $amount): bool
+    {
+        return $this->value < $amount->value();
+    }
 }
